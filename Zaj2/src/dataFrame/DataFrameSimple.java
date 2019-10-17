@@ -1,11 +1,14 @@
 package dataFrame;
 
+import values.StringValue;
+import values.Value;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataFrameSimple {
-    private List<ArrayList<Object>> mColumns;
+    private List<ArrayList<Value>> mColumns;
     protected String[] mColumnNames;
     protected String[] mColumnTypes;
 
@@ -19,7 +22,7 @@ public class DataFrameSimple {
      */
     public int size()
     {
-        ArrayList<Object> firstColumn = mColumns.get(0);
+        ArrayList<Value> firstColumn = mColumns.get(0);
 
         if (firstColumn == null) {
             return 0;
@@ -31,7 +34,7 @@ public class DataFrameSimple {
     /*
      – zwracającą kolumnę o podanej nazwie
      */
-    public ArrayList<Object> get(String columnName)
+    public ArrayList<Value> get(String columnName)
     {
         int columnIndex = -1;
 
@@ -54,12 +57,12 @@ public class DataFrameSimple {
      */
     public DataFrameSimple get(String[] colNames, boolean copy)
     {
-        List<ArrayList<Object>> columns = new ArrayList<ArrayList<Object>>();
+        List<ArrayList<Value>> columns = new ArrayList<ArrayList<Value>>();
         String[] colTypes = new String[colNames.length];
 
         for (int i = 0; i < colNames.length; i++) {
             String currentColName = colNames[i];
-            ArrayList<Object> currentColumn = get(currentColName);
+            ArrayList<Value> currentColumn = get(currentColName);
 
             for (int j = 0; j < mColumnNames.length; j++)
             {
@@ -72,10 +75,10 @@ public class DataFrameSimple {
 
             if(copy)
             {
-                ArrayList<Object> copiedColumn = new ArrayList<>();
+                ArrayList<Value> copiedColumn = new ArrayList<>();
 
-                for (Object x: currentColumn){
-                    copiedColumn.add(new StringBuilder(x.toString()).toString());
+                for (Value x: currentColumn){
+                    copiedColumn.add(new StringValue(new StringBuilder(x.toString()).toString()));
                 }
 
                 columns.add(copiedColumn);
@@ -100,7 +103,7 @@ public class DataFrameSimple {
     {
         DataFrameSimple rowDataFrame = new DataFrameSimple(mColumnNames, mColumnTypes);
 
-        List<ArrayList<Object>> columnsForRowDataFrame = getRowsFromTo(i, i);
+        List<ArrayList<Value>> columnsForRowDataFrame = getRowsFromTo(i, i);
 
         rowDataFrame.set(columnsForRowDataFrame);
 
@@ -114,29 +117,29 @@ public class DataFrameSimple {
     {
         DataFrameSimple rowDataFrame = new DataFrameSimple(mColumnNames, mColumnTypes);
 
-        List<ArrayList<Object>> columnsForRowDataFrame = getRowsFromTo(from, to);
+        List<ArrayList<Value>> columnsForRowDataFrame = getRowsFromTo(from, to);
 
         rowDataFrame.set(columnsForRowDataFrame);
 
         return rowDataFrame;
     }
 
-    public void set(List<ArrayList<Object>> columns)
+    public void set(List<ArrayList<Value>> columns)
     {
         mColumns = columns;
     }
 
-    private List<ArrayList<Object>> getRowsFromTo(int from, int to)
+    private List<ArrayList<Value>> getRowsFromTo(int from, int to)
     {
-        List<ArrayList<Object>> columns = new ArrayList<ArrayList<Object>>();
+        List<ArrayList<Value>> columns = new ArrayList<ArrayList<Value>>();
 
-        for (ArrayList<Object> column: mColumns)
+        for (ArrayList<Value> column: mColumns)
         {
-            ArrayList<Object> newColumn = new ArrayList<>();
+            ArrayList<Value> newColumn = new ArrayList<>();
 
             for (int i = from; i <= to; i++)
             {
-                Object valueAtIndex = column.get(i);
+                Value valueAtIndex = column.get(i);
                 newColumn.add(valueAtIndex);
             }
 
