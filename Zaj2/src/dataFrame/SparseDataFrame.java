@@ -4,16 +4,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SparseDataFrame extends DataFrame
+public class SparseDataFrame extends DataFrameSimple
 {
     private String mSkipParameter;
     private List<List<COOValue>> mValues;
     private int mNumOfRows;
     private int mNumOfColumns;
 
-    public SparseDataFrame(List<String> colNames, List<String> colTypes, String parameter)
+    public SparseDataFrame(String[] columnNames, String[] columnTypes, String parameter)
     {
-        super(colNames, colTypes);
+        super(columnNames, columnTypes);
 
         mSkipParameter = parameter;
         mValues = new ArrayList<>();
@@ -24,15 +24,15 @@ public class SparseDataFrame extends DataFrame
         mNumOfRows = dataFrame.size();
         mNumOfColumns = dataFrame.get(0).size();
 
-        for(var row: dataFrame)
+        for(List<Object> row: dataFrame)
         {
-            var currentRowValues = new ArrayList<COOValue>();
-            for(var i = 0; i < row.size(); i++)
+            List<COOValue> currentRowValues = new ArrayList<COOValue>();
+            for(int i = 0; i < row.size(); i++)
             {
-                var currentValue = row.get(i).toString();
+                String currentValue = row.get(i).toString();
                 if (!currentValue.equals(mSkipParameter))
                 {
-                    var cooValue = new COOValue(Integer.toString(i), currentValue);
+                    COOValue cooValue = new COOValue(Integer.toString(i), currentValue);
                     currentRowValues.add(cooValue);
                 }
             }
@@ -40,15 +40,15 @@ public class SparseDataFrame extends DataFrame
         }
     }
 
-    public DataFrame toDense()
+    public DataFrameSimple toDense()
     {
-        var dataFrame = new ArrayList<List<Object>>();
+        List<ArrayList<Object>> dataFrame = new ArrayList<ArrayList<Object>>();
 
-        for(var i = 0; i < mNumOfRows; i++)
+        for(int i = 0; i < mNumOfRows; i++)
         {
-            var row = new ArrayList<Object>();
+            ArrayList<Object> row = new ArrayList<Object>();
 
-            for(var j = 0; j < mNumOfColumns; j++)
+            for(int j = 0; j < mNumOfColumns; j++)
             {
                 
             }
@@ -56,8 +56,8 @@ public class SparseDataFrame extends DataFrame
             dataFrame.add(row);
         }
 
-        var dataFrameObject = new DataFrame(colNames, colTypes);
-        dataFrameObject.setDataFrame(dataFrame);
+        DataFrameSimple dataFrameObject = new DataFrameSimple(mColumnNames, mColumnTypes);
+        dataFrameObject.set(dataFrame);
         return dataFrameObject;
     }
 }
