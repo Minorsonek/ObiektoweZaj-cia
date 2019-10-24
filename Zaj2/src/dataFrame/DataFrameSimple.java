@@ -1,5 +1,7 @@
 package dataFrame;
 
+import values.DFGroupBy;
+import values.GroupBy;
 import values.StringValue;
 import values.Value;
 
@@ -12,7 +14,10 @@ public class DataFrameSimple {
     protected String[] mColumnNames;
     protected String[] mColumnTypes;
 
-    public DataFrameSimple(String[] columnNames, String[] columnTypes) {
+    public DataFrameSimple(String[] columnNames, String[] columnTypes)
+    {
+        mColumns = new ArrayList<ArrayList<Value>>();
+
         mColumnNames = columnNames;
         mColumnTypes = columnTypes;
     }
@@ -34,16 +39,9 @@ public class DataFrameSimple {
     /*
      – zwracającą kolumnę o podanej nazwie
      */
-    public ArrayList<Value> get(String columnName)
+    public ArrayList<Value> getColumn(String columnName)
     {
-        int columnIndex = -1;
-
-        for (int i = 0; i < mColumnNames.length; i++) {
-            if (mColumnNames[i].equals(columnName)) {
-                columnIndex = i;
-                break;
-            }
-        }
+        int columnIndex = getColumnIndexFromName(columnName);
 
         if (columnIndex == -1) {
             return null;
@@ -62,7 +60,7 @@ public class DataFrameSimple {
 
         for (int i = 0; i < colNames.length; i++) {
             String currentColName = colNames[i];
-            ArrayList<Value> currentColumn = get(currentColName);
+            ArrayList<Value> currentColumn = getColumn(currentColName);
 
             for (int j = 0; j < mColumnNames.length; j++)
             {
@@ -129,6 +127,15 @@ public class DataFrameSimple {
         mColumns = columns;
     }
 
+    public void add(DataFrameSimple dataFrame)
+    {
+        for (int i = 0; i < mColumns.size(); i++)
+        {
+            ArrayList<Value> currentColumn = mColumns.get(i);
+            currentColumn.add(dataFrame.getColumn(mColumnNames[i]).get(0));
+        }
+    }
+
     private List<ArrayList<Value>> getRowsFromTo(int from, int to)
     {
         List<ArrayList<Value>> columns = new ArrayList<ArrayList<Value>>();
@@ -147,5 +154,48 @@ public class DataFrameSimple {
         }
 
         return columns;
+    }
+
+    private int getColumnIndexFromName(String columnName)
+    {
+        int columnIndex = -1;
+
+        for (int i = 0; i < mColumnNames.length; i++) {
+            if (mColumnNames[i].equals(columnName)) {
+                columnIndex = i;
+                break;
+            }
+        }
+
+        return columnIndex;
+    }
+
+    public GroupBy groupBy(String columnName)
+    {
+        List<DataFrameSimple> groupedDataFrames = new ArrayList<>();
+        List<Value> uniqueColumnValues = new ArrayList<>();
+
+        int columnIndex = getColumnIndexFromName(columnName);
+
+        for (int i = 0; i < size(); i++)
+        {
+            DataFrameSimple currentDataFrame;
+            Value currentValue = mColumns.get(columnIndex).get(i);
+
+            if (uniqueColumnValues.contains(currentValue))
+            {
+                currentDataFrame = groupedDataFrames.get(uniqueColumnValues.indexOf(currentValue));
+            }
+            else
+            {
+                uniqueColumnValues.add(currentValue);
+                currentDataFrame = new DataFrameSimple(mColumnNames, mColumnTypes);
+                groupedDataFrames.add(currentDataFrame);
+            }
+
+            currentDataFrame.add(iloc(i));
+        }
+
+        return new DFGroupBy(groupedDataFrames, columnName);
     }
 }

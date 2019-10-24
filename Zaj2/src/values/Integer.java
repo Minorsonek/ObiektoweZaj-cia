@@ -121,6 +121,11 @@ public class Integer implements Value
         return new Integer(valueAsInt);
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new Integer(IntValue);
+    }
+
     private Integer getTypeFromValue(Value value, String errorMessage) throws Exception
     {
         if (!(value instanceof Integer))

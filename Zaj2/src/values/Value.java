@@ -1,6 +1,6 @@
 package values;
 
-public interface Value
+public interface Value extends Cloneable
 {
     String toString();
     Value add(Value value) throws Exception;

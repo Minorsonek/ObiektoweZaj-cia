@@ -90,4 +90,9 @@ public class StringValue implements Value
     public Value create(String s) {
         return new StringValue(s);
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new StringValue(mStringValue);
+    }
 }

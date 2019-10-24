@@ -1,5 +1,6 @@
 import dataFrame.DataFrameSimple;
 import dataFrame.SparseDataFrame;
+import values.StringValue;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
