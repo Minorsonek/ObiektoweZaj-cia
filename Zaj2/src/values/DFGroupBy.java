@@ -2,6 +2,7 @@ package values;
 
 import dataFrame.DataFrameSimple;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DFGroupBy implements GroupBy
@@ -25,9 +26,30 @@ public class DFGroupBy implements GroupBy
 
         for (DataFrameSimple dataFrame : mInnerDataFrames)
         {
-            DataFrameSimple maximumRow;
+            DataFrameSimple maximumRow = new DataFrameSimple
+                    (mDataFramesColumnsNames, mDataFramesColumnsTypes);
 
-            
+            List<ArrayList<Value>> columns = new ArrayList<>();
+
+            for (String columnName: mDataFramesColumnsNames)
+            {
+                Value maxValue = dataFrame.getColumn(columnName).get(0);
+
+                for (Value val: dataFrame.getColumn(columnName))
+                {
+                    if (val.greaterThan(maxValue))
+                    {
+                        maxValue = val;
+                    }
+                }
+
+                ArrayList<Value> newColumn = new ArrayList<Value>();
+                newColumn.add(maxValue);
+
+                columns.add(newColumn);
+
+            }
+            maximumRow.set(new ArrayList<>());
 
             finalDataFrame.add(maximumRow);
         }
