@@ -158,16 +158,13 @@ public class DataFrameSimple {
 
     private int getColumnIndexFromName(String columnName)
     {
-        int columnIndex = -1;
-
         for (int i = 0; i < mColumnNames.length; i++) {
             if (mColumnNames[i].equals(columnName)) {
-                columnIndex = i;
-                break;
+                return i;
             }
         }
 
-        return columnIndex;
+        return -1;
     }
 
     public GroupBy groupBy(String columnName)
@@ -196,6 +193,6 @@ public class DataFrameSimple {
             currentDataFrame.add(iloc(i));
         }
 
-        return new DFGroupBy(groupedDataFrames, columnName);
+        return new DFGroupBy(groupedDataFrames, columnName, mColumnNames, mColumnTypes);
     }
 }

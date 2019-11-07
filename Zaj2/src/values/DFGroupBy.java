@@ -11,10 +11,12 @@ public class DFGroupBy implements GroupBy
     private String[] mDataFramesColumnsTypes;
     private String mGroupedColumnName;
 
-    public DFGroupBy(List<DataFrameSimple> dataFrames, String colName)
+    public DFGroupBy(List<DataFrameSimple> dataFrames, String colName, String[] colNames, String[] colTypes)
     {
         mInnerDataFrames = dataFrames;
         mGroupedColumnName = colName;
+        mDataFramesColumnsNames = colNames;
+        mDataFramesColumnsTypes = colTypes;
     }
 
     @Override
@@ -67,7 +69,14 @@ public class DFGroupBy implements GroupBy
     }
 
     @Override
-    public DataFrameSimple apply(Applyable applyable) {
-        return null;
+    public DataFrameSimple apply(Applyable applyable){
+        DataFrameSimple finalDataFrame = new DataFrameSimple(mDataFramesColumnsNames,mDataFramesColumnsTypes);
+
+        for (DataFrameSimple dataFrame : mInnerDataFrames)
+        {
+            finalDataFrame.add(applyable.apply(dataFrame));
+        }
+
+        return finalDataFrame;
     }
 }
