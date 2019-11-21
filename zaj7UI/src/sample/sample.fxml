@@ -1,0 +1,15 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane fx:controller="sample.Controller"
+           xmlns:fx="http://javafx.com/fxml" alignment="center">
+
+    <TextField text="Number of columns"></TextField>
+    <TextField text="Number of rows"></TextField>
+
+    <Button fx:id="button" onAction="#handleOnButtonAction"></Button>
+
+</StackPane>
