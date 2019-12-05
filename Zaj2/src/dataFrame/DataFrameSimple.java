@@ -176,21 +176,25 @@ public class DataFrameSimple {
 
         for (int i = 0; i < size(); i++)
         {
-            DataFrameSimple currentDataFrame;
-            Value currentValue = mColumns.get(columnIndex).get(i);
+            int finalI = i;
+            new Thread(() -> {
+                DataFrameSimple currentDataFrame;
+                Value currentValue = mColumns.get(columnIndex).get(finalI);
 
-            if (uniqueColumnValues.contains(currentValue))
-            {
-                currentDataFrame = groupedDataFrames.get(uniqueColumnValues.indexOf(currentValue));
-            }
-            else
-            {
-                uniqueColumnValues.add(currentValue);
-                currentDataFrame = new DataFrameSimple(mColumnNames, mColumnTypes);
-                groupedDataFrames.add(currentDataFrame);
-            }
+                if (uniqueColumnValues.contains(currentValue))
+                {
+                    currentDataFrame = groupedDataFrames.get(uniqueColumnValues.indexOf(currentValue));
+                }
+                else
+                {
+                    uniqueColumnValues.add(currentValue);
+                    currentDataFrame = new DataFrameSimple(mColumnNames, mColumnTypes);
+                    groupedDataFrames.add(currentDataFrame);
+                }
 
-            currentDataFrame.add(iloc(i));
+                currentDataFrame.add(iloc(finalI));
+
+            }).start();
         }
 
         return new DFGroupBy(groupedDataFrames, columnName, mColumnNames, mColumnTypes);
