@@ -63,7 +63,7 @@ public class DFGroupBy implements GroupBy
 
         for (DataFrameSimple dataFrame : mInnerDataFrames)
         {
-            DataFrameSimple minimumRow;
+            DataFrameSimple minimumRow = null;
             finalDataFrame.add(minimumRow);
         }
 

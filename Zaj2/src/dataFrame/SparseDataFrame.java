@@ -1,5 +1,7 @@
 package dataFrame;
 
+import values.Value;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +43,11 @@ public class SparseDataFrame extends DataFrameSimple
 
     public DataFrameSimple toDense()
     {
-        List<ArrayList<Object>> dataFrame = new ArrayList<ArrayList<Object>>();
+        List<ArrayList<Value>> dataFrame = new ArrayList<ArrayList<Value>>();
 
         for(int i = 0; i < mNumOfRows; i++)
         {
-            ArrayList<Object> row = new ArrayList<Object>();
+            ArrayList<Value> row = new ArrayList<Value>();
 
             for(int j = 0; j < mNumOfColumns; j++)
             {

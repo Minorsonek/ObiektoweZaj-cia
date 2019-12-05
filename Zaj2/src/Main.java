@@ -1,3 +1,4 @@
+import dataFrame.DataFrameDb;
 import dataFrame.DataFrameSimple;
 import dataFrame.SparseDataFrame;
 import values.StringValue;
@@ -35,5 +36,7 @@ public class Main
         sdf.setDataFrame(dataFrame);
 
         System.out.println(sdf.toString());
+
+        DataFrameDb dfdb = new DataFrameDb("groupby.csv");
     }
 }
